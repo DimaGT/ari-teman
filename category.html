@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo"><b>ARI TEMAN</b> DESIGN PARTNERS</a>
+        <div class="menu">
+            <span onclick="toggleMenu()">+</span>
+            <div class="dropdown">
+                <a href="#">Projects</a>
+                <a href="#">About</a>
+                <a href="#">Founder</a>
+                <a href="#">Contact</a>
+                <a href="#">Instagram</a>
+                <a href="#">Twitter X</a>
+                </ul>
+            </div>
+    </header>
+    <div class="container">
+        <main id="project-details"></main>
+    </div>
+    <footer>
+        <p>© 2025 ARI TEMAN DESIGN PARTNERS. All rights reserved.</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-x-twitter"></i></a>
+        </div>
+    </footer>
+    <!-- modal -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="fullImage">
+    </div>
+
+    <script src="./projectsData.js"></script>
+    <script src="./modal.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get("category");
+        const projectTitle = params.get("project");
+
+        const project = projectsData[category]?.find(p => p.title === projectTitle);
+
+        if (project) {
+            let contentHTML = '';
+
+            project.content.forEach(item => {
+                let title = item.title ? `<h3>${item.title}</h3>` : '';
+
+                switch (item.type) {
+                    case 'title':
+                        contentHTML += `<h2>${item.value}</h2>`;
+                        break;
+                    case 'text':
+                        contentHTML += `<div>${title}<div class="text-block"><p>${item.value}</p></div></div>`;
+                        break;
+                    case 'image':
+                        contentHTML += `<div>${title}<div class="image-block"><img src="${item.src}" class="project-image ${item.layout || ''}"></div></div>`;
+                        break;
+                    case 'text-image':
+                        contentHTML += `
+                    <div>${title}<div class="text-image ${item.position}">
+                        <p>${item.text}</p>  
+                        <img src="${item.src}" class="gallery-item">
+                    </div></div>`;
+                        break;
+                    case 'image-group':
+                        contentHTML += `
+                    <div>${title}<div class="image-group"> 
+                        <img src="${item.images[0]}">
+                        <img src="${item.images[1]}">
+                    </div></div>`;
+                        break;
+                    case 'split':
+                        contentHTML += `
+                    <div>${title}<div class="split-block">
+                        <div class="split-left">${generateBlock(item.left)}</div>
+                        <div class="split-right">${generateBlock(item.right)}</div>
+                    </div></div>`;
+                        break;
+                    case 'gallery':
+                        contentHTML += `
+                    <div class="gallery-block"> 
+                        ${title}
+                        <div class="gallery-grid">
+                            ${item.images.map(src => `<img src="${src}" class="gallery-item">`).join('')}
+                        </div>
+                    </div>`;
+                        break;
+                }
+            });
+
+            document.getElementById("project-details").innerHTML = `
+        <div class='project-container'>
+            <h1>${project.title}</h1>
+            <div class="project ${project.layout}">${contentHTML}</div>
+        </div>`;
+        }
+
+        function generateBlock(block) {
+            if (!block) return '';
+            switch (block.type) {
+                case 'text': return `<p>${block.value}</p>`;
+                case 'image': return `<img src="${block.src}" class="project-image full-width">`;
+                case 'text-image':
+                    return ` <div><div class="text-image ${block.position}">
+                        <p>${block.text}</p>  
+                        <img src="${block.src}" class="gallery-item">
+                    </div></div>`;
+                case 'image-group':
+                    return `<div class="image-group">
+                        <img src="${block.images[0]}">
+                        <img src="${block.images[1]}">
+                    </div>`;
+                default: return '';
+            }
+        }
+    </script>
+
+
+
+</body>
+
+</html>
