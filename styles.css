@@ -310,12 +310,7 @@ header .container{
 .split-right {
     width: 50%;
 }
-.split-left.image-group,
-.split-right.image-group,
-.split-left.image,
-.split-right.image {
-    order: 2;
-}
+
 .split-block .text-image img {
     width: 100% !important;
 }
@@ -345,6 +340,12 @@ header .container{
     width: 50%;
 }
 @media (max-width: 768px) {
+    .split-left.image-group,
+.split-right.image-group,
+.split-left.image,
+.split-right.image {
+    order: 2;
+}
     
     .menu span {
         margin-left: 0;

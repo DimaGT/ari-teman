@@ -37,6 +37,8 @@ const projectsData = {
                         images: [
                             `./img/projects/Triangle/plant1b.png`,
                             `./img/projects/Triangle/plant2.png`,
+                            `./img/projects/Triangle/flower.png`,
+                            `./img/projects/Triangle/walls.png`,
                         ],
                     },
                     right: {
@@ -46,22 +48,6 @@ const projectsData = {
                             'As Frank Lloyd Wright taught, it serves to be seamlessly with nature without those inside feeling contained.',
                             'A glass entryway and staircase wraps around an outdoor garden and tree allowing guests to experience the garden from all heights and perspectives.',
                             'Glass walls open to and overlook gardens, mossy walls, and atrium.',
-                        ],
-                    },
-                },
-                {
-                    type: `split`,
-                    title: null,
-                    left: {
-                        type: `image-group`,
-                        images: [
-                            `./img/projects/Triangle/flower.png`,
-                            `./img/projects/Triangle/walls.png`,
-                        ],
-                    },
-                    right: {
-                        type: `text-group`,
-                        value: [
                             'Architectural woodwork contains built in planters throughout the home.',
                             'A room dedicated to the care of plants is adjacent to the garden entrance.',
                             'The front pathway takes family and visitors through a rainbow of flowers.',
@@ -69,6 +55,7 @@ const projectsData = {
                         ],
                     },
                 },
+                
                 {
                     type: `split`,
                     title: `Making Space`,
