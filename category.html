@@ -10,17 +10,21 @@
 
 <body>
     <header>
-        <a href="index.html" class="logo"><b>ARI TEMAN</b> DESIGN PARTNERS</a>
-        <div class="menu">
-            <span onclick="toggleMenu()">+</span>
-            <div class="dropdown">
-                <a href="#">Projects</a>
-                <a href="#">About</a>
-                <a href="#">Founder</a>
-                <a href="#">Contact</a>
-                <a href="#">Instagram</a>
-                <a href="#">Twitter X</a>
-                </ul>
+        <div class="container">
+            <div class="header">
+                <a href="index.html" class="logo"><b>ARI TEMAN</b> DESIGN PARTNERS</a>
+                <div class="menu">
+                    <span onclick="toggleMenu()">+</span>
+                    <div class="dropdown">
+                        <a href="#">Projects</a>
+                        <a href="#">About</a>
+                        <a href="#">Founder</a>
+                        <a href="#">Contact</a>
+                        <a href="#">Instagram</a>
+                        <a href="#">Twitter X</a>
+                        </ul>
+                    </div>
+                </div>
             </div>
     </header>
     <div class="container">
@@ -53,13 +57,17 @@
 
             project.content.forEach(item => {
                 let title = item.title ? `<h3>${item.title}</h3>` : '';
-
                 switch (item.type) {
                     case 'title':
                         contentHTML += `<h2>${item.value}</h2>`;
                         break;
                     case 'text':
-                        contentHTML += `<div>${title}<div class="text-block"><p>${item.value}</p></div></div>`;
+                        contentHTML += `<div>${title}<div class="text-block ${item?.layout}"><p>${item.value}</p></div></div>`;
+                        break;
+                    case 'text-group':
+                        contentHTML += `<div>${title}<div class="text-block ${item?.layout}">
+                                ${item?.value?.length && item?.value?.map(item => `<p>${item}</p>`).join('')}
+                            </div></div>`;
                         break;
                     case 'image':
                         contentHTML += `<div>${title}<div class="image-block"><img src="${item.src}" class="project-image ${item.layout || ''}"></div></div>`;
@@ -74,15 +82,14 @@
                     case 'image-group':
                         contentHTML += `
                     <div>${title}<div class="image-group"> 
-                        <img src="${item.images[0]}">
-                        <img src="${item.images[1]}">
+                        ${item?.images?.map(src => `<img src="${src}">`).join('')}
                     </div></div>`;
                         break;
                     case 'split':
                         contentHTML += `
                     <div>${title}<div class="split-block">
-                        <div class="split-left">${generateBlock(item.left)}</div>
-                        <div class="split-right">${generateBlock(item.right)}</div>
+                        <div class="split-left ${item.left.type}">${generateBlock(item.left)}</div>
+                        <div class="split-right ${item.right.type}">${generateBlock(item.right)}</div>
                     </div></div>`;
                         break;
                     case 'gallery':
@@ -90,24 +97,34 @@
                     <div class="gallery-block"> 
                         ${title}
                         <div class="gallery-grid">
-                            ${item.images.map(src => `<img src="${src}" class="gallery-item">`).join('')}
+                            ${item.images.map(src => `<div><img src="${src}" class="gallery-item"></div>`).join('')}
                         </div>
                     </div>`;
                         break;
                 }
             });
 
+
             document.getElementById("project-details").innerHTML = `
         <div class='project-container'>
-            <h1>${project.title}</h1>
+            <h1>${project.title}</h1>  
+            ${project?.subtitle ? `<p class='subtitle'>${project.subtitle}</p>` : ''}
             <div class="project ${project.layout}">${contentHTML}</div>
         </div>`;
         }
 
         function generateBlock(block) {
+            
             if (!block) return '';
+            console.log(block.type === 'text-group' && block?.value?.length && block?.value?.map(item => `<p>${item}</p`).join(''));
+
             switch (block.type) {
                 case 'text': return `<p>${block.value}</p>`;
+                case 'text-group':
+                    return `<div class="text-block">
+                                ${block?.value?.length && block?.value?.map(item => `<p>${item}</p>`).join('')}
+                            </div>`;
+                    break;
                 case 'image': return `<img src="${block.src}" class="project-image full-width">`;
                 case 'text-image':
                     return ` <div><div class="text-image ${block.position}">
@@ -116,8 +133,7 @@
                     </div></div>`;
                 case 'image-group':
                     return `<div class="image-group">
-                        <img src="${block.images[0]}">
-                        <img src="${block.images[1]}">
+                        ${block?.images?.map(src => `<img src="${src}" >`).join('')}
                     </div>`;
                 default: return '';
             }
